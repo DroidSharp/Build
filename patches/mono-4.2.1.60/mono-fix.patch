@@ -1,0 +1,85 @@
+From 5c87d7676bcc452f304b4d0e8a5b0d0796f7eef0 Mon Sep 17 00:00:00 2001
+From: Zachariah Brown <contact@zbrown.net>
+Date: Fri, 30 Oct 2015 23:32:08 +0000
+Subject: [PATCH] Fixes to allow building on android
+
+---
+ mono/mini/main.c                  |    1 -
+ mono/mini/mini-arm.c              |   14 +++++++-------
+ mono/utils/mono-threads-android.c |   16 ++++++++++++++++
+ 3 files changed, 23 insertions(+), 8 deletions(-)
+
+diff --git a/mono/mini/main.c b/mono/mini/main.c
+index 784179c..5a1497c 100644
+--- a/mono/mini/main.c
++++ b/mono/mini/main.c
+@@ -117,7 +117,6 @@ main (void)
+ int
+ main (int argc, char* argv[])
+ {
+-	mono_build_date = build_date;
+ 	
+ 	return mono_main_with_options (argc, argv);
+ }
+diff --git a/mono/mini/mini-arm.c b/mono/mini/mini-arm.c
+index addb060e5..24257e5 100644
+--- a/mono/mini/mini-arm.c
++++ b/mono/mini/mini-arm.c
+@@ -922,6 +922,13 @@ mono_arch_cpu_enumerate_simd_versions (void)
+ 	return 0;
+ }
+ 
++#ifdef MONO_ARCH_SOFT_FLOAT_FALLBACK
++gboolean
++mono_arch_is_soft_float (void)
++{
++        return arm_fpu == MONO_ARM_FPU_NONE;
++}
++#endif
+ 
+ #ifndef DISABLE_JIT
+ 
+@@ -942,13 +949,6 @@ mono_arch_opcode_needs_emulation (MonoCompile *cfg, int opcode)
+ 	return TRUE;
+ }
+ 
+-#ifdef MONO_ARCH_SOFT_FLOAT_FALLBACK
+-gboolean
+-mono_arch_is_soft_float (void)
+-{
+-	return arm_fpu == MONO_ARM_FPU_NONE;
+-}
+-#endif
+ 
+ gboolean
+ mono_arm_is_hard_float (void)
+diff --git a/mono/utils/mono-threads-android.c b/mono/utils/mono-threads-android.c
+index a72ee81..e89f64b 100644
+--- a/mono/utils/mono-threads-android.c
++++ b/mono/utils/mono-threads-android.c
+@@ -4,6 +4,22 @@
+ 
+ #ifdef ENABLE_EXTENSION_MODULE
+ #include "../../../mono-extensions/mono/utils/mono-threads-android.c"
++#else
++#include <mono/utils/mono-threads.h>
++#include <pthread.h>
++
++void
++mono_threads_core_get_stack_bounds (guint8 **staddr, size_t *stsize)
++{
++	pthread_attr_t attr;
++
++	*staddr = NULL;
++	*stsize = (size_t)-1;
++
++	pthread_getattr_np (pthread_self (), &attr);
++	pthread_attr_getstack (&attr, (void**)staddr, stsize);
++	pthread_attr_destroy (&attr);
++}
+ #endif
+ 
+ #endif
+-- 
+1.7.10.4
+
