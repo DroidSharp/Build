@@ -1,5 +1,5 @@
-cmake_minimum_required (VERSION 2.6)
-project (MonoBuild)
+cmake_minimum_required(VERSION 2.6)
+project(DroidSharpBuild)
 
 if(NOT ANDROID)
 	message(FATAL_ERROR "Building without the android toolchain is not supported")
@@ -10,15 +10,15 @@ set(MONO_INSTALL_DIR "${CMAKE_SOURCE_DIR}/mono-build" CACHE PATH "Mono installat
 set(MONO_REV "mono-4.2.1.60" CACHE STRING "Mono revision to checkout")
 set(MONO_APPLY_PATCHES TRUE CACHE BOOL "Should patches be applied?")
 
-if (MONO_APPLY_PATCHES)
+if(MONO_APPLY_PATCHES)
 	set(MONO_APPLY_PATCHES_VALUE "yes")
 else()
 	set(MONO_APPLY_PATCHES_VALUE "no")
 endif()
 
 add_custom_target(
-	MonoBuild ALL	
-	COMMAND bash scripts/mono-build.sh
+	DroidSharpBuild ALL
+	COMMAND bash scripts/build.sh
 		"${MONO_SRC_DIR}"
 		"${MONO_REV}"
 		"${MONO_APPLY_PATCHES_VALUE}"

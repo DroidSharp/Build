@@ -52,4 +52,4 @@ echo "make CFLAGS=\"$flags\""
 make CFLAGS="$flags"
 echo "make install"
 make install
-echo "Mono has been built for $abi at $install_dir"
+echo "Mono has been built for $abi and installed at $install_dir"

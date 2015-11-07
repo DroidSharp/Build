@@ -1,6 +1,6 @@
-# DroidSharp | Mono-Build
+# DroidSharp-Build
 
-Mono-Build is collection of scripts and patches to easily cross-compile the Mono project for Android.
+DroidSharp-Build is collection of scripts and patches to easily cross-compile the Mono project for Android.
 
 ## TL;DR
 
@@ -36,4 +36,4 @@ There are several options that can be passed to cmake to configure the build:
 
 # License
 
-Mono-Build is copyrighted (C) by Zachariah Brown and licensed under the terms of LGPL3.
+DroidSharp-Build is copyrighted (C) by Zachariah Brown and licensed under the terms of LGPLv3.
