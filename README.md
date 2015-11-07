@@ -6,7 +6,7 @@ DroidSharp-Build is collection of scripts and patches to easily cross-compile th
 
     cmake -DCMAKE_TOOLCHAIN_FILE=cmake/toolchains/android.toolchain.cmake \
           -DANDROID_NDK=<ndk_path>                                        \
-          <source_path>
+          .
     make
 
 The build scripts will automatically download and patch the Mono project so it compiles while targeting Android.
